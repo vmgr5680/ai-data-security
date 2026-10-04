@@ -1,0 +1,6 @@
+app.log                suggested label: restricted  DATE_TIMEx4, PERSONx1, SECRETx1, US_SSNx1
+crm_export.csv         suggested label: restricted  CUSTOMER_IDx3, EMAIL_ADDRESSx3, PERSONx3, PHONE_NUMBERx3, US_SSNx3
+support_tickets.jsonl  suggested label: restricted  CREDIT_CARDx1, DATE_TIMEx1, EMAIL_ADDRESSx1, EMPLOYEE_IDx3, PERSONx3
+team_wiki.md           suggested label: internal    DATE_TIMEx1, PERSONx1
+
+What the inventory cannot see: team_wiki.md holds a salary, and no entity type exists for it. The label for that file has to come from its source (the HR sheet), which is Part 6's point.

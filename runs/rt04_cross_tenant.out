@@ -1,0 +1,16 @@
+== one unscoped map shared by every tenant ==
+acme sees:   Refund approved for PERSON_001, SSN US_SSN_001.
+globex sees: Chargeback opened for PERSON_002, SSN US_SSN_002.
+globex's agent reveals acme's token: Maria Garcia 900-45-1122
+
+== scope = tenant ==
+acme sees:   Refund approved for PERSON_001, SSN US_SSN_001.
+globex sees: Chargeback opened for PERSON_001, SSN US_SSN_001.  <- same token text, different tenant
+globex reveals PERSON_001: John Smith
+acme reveals PERSON_001:   Maria Garcia
+audit: [('tenant:globex', 'revealed'), ('tenant:acme', 'revealed')]
+
+Note: the token strings collide across tenants by design. Safety
+comes from the scope on every lookup, so a token copied into the
+wrong tenant's context resolves to that tenant's own record or to
+nothing. Never to the other tenant's.

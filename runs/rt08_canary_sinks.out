@@ -1,0 +1,12 @@
+== unguarded ==
+  900-99-0417                  reached: ['audit_log', 'conversation_log', 'model_input', 'trace']
+  canary-0417@example.invalid  reached: ['agent_memory', 'conversation_log', 'model_input', 'trace']
+  model saw: {"customer_name": "Dana Reyes", "ssn": "900-99-0417", "email": "canary-0417@example.invalid", "payment_status": "Failed"}
+== guarded, default detector ==
+  900-99-0417                  reached: none
+  canary-0417@example.invalid  reached: ['agent_memory']
+  model saw: {"customer_name": "PERSON_001", "ssn": "US_SSN_001", "email": "canary-0417@URL_001valid", "payment_status": "Failed"}
+== guarded, house detector ==
+  900-99-0417                  reached: none
+  canary-0417@example.invalid  reached: none
+  model saw: {"customer_name": "PERSON_001", "ssn": "US_SSN_001", "email": "EMAIL_ADDRESS_001", "payment_status": "Failed"}

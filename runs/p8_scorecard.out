@@ -1,0 +1,10 @@
+== step 1: candidate scorecard (latency is machine-dependent) ==
+candidate        precision  recall  p95 ms
+regex_only             80%     67%   0.001
+presidio               86%    100%   4.253
+presidio_house         86%    100%   4.320
+
+== step 6: search the audit record for the value ==
+Customer Dana Reyes, SSN <SSN>, phone ********0147.
+naive leaks: ['Dana Reyes', '0147']
+typed leaks: []

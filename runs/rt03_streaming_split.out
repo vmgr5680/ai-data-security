@@ -1,0 +1,10 @@
+deltas: ['Thanks for waiting. ', 'I found the account. The', " customer's SSN is 900", '-12-', '3456 and t', 'he card on file ends i', 'n 4242. Anything else?']
+
+== scanning each delta on its own ==
+Thanks for waiting. I found the account. The customer's SSN is 900-12-3456 and the card on file ends in 4242. Anything else?
+SSN reached the user: True
+
+== StreamScanner: hold back a short tail, cut at whitespace ==
+Thanks for waiting. I found the account. The customer's SSN is <US_SSN> and the card on file ends in 4242. Anything else?
+SSN reached the user: False
+released in 6 pieces; the cost is up to 48 characters of extra delay

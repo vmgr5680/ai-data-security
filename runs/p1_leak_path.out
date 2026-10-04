@@ -1,0 +1,25 @@
+== 1. detector over the serialized tool response ==
+DATE_TIME        04/12/1985           score=0.95
+PERSON           John Smith           score=0.85
+PERSON           date_of_birth        score=0.85
+US_SSN           900-12-3456          score=0.85
+
+== 2. detect, then replace everything flagged ==
+{
+  "customer_name": "<PERSON>",
+  "customer_id": "CUST-88231",
+  "<PERSON>": "<DATE_TIME>",
+  "ssn": "<US_SSN>",
+  "account_balance": "$10,250",
+  "payment_status": "Failed"
+}
+
+== 3. the fix: values only, field names as context, house formats ==
+customer_name    PERSON       John Smith   0.85
+customer_id      CUSTOMER_ID  CUST-88231   1.00
+date_of_birth    DATE_TIME    04/12/1985   0.95
+ssn              US_SSN       900-12-3456  0.85
+
+== 4. same facts, harder shape: a misspelled name, a spelled-out SSN ==
+PERSON           John Smiht's         score=0.85
+US_SSN           (none found)

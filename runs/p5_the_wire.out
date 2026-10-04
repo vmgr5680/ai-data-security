@@ -1,0 +1,26 @@
+== the nine-words trace ==
+USER PROMPT: 'Show me the status of my order.'  (0 findings)
+
+agent calls lookup_order(order_id='ORD-12345')
+  [ingress] lookup_order carries
+      customer.name   PERSON        0.85
+      customer.phone  PHONE_NUMBER  0.75
+      customer.ssn    US_SSN        0.85
+
+agent then calls search_vendor(query='John Smith 555-123-4567 refund')
+  [egress] search_vendor carries
+      query           PERSON        0.85
+      query           PHONE_NUMBER  0.40
+
+== the same response, as a network proxy sees it ==
+PERSON        John Smith      0.85
+US_SSN        900-12-3456     0.85
+PHONE_NUMBER  555-123-4567    0.75
+
+== redacting the vendor query ==
+before:  John Smith 555-123-4567 refund
+after:   <PERSON> <PHONE_NUMBER> refund
+
+== what the wrapper costs per call (p95, machine-dependent) ==
+bare tool call        0.001 ms
+guarded tool call    21.564 ms

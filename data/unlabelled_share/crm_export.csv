@@ -1,0 +1,4 @@
+customer_id,full_name,email,phone,ssn,notes
+CUST-88231,John Smith,john.smith@example.com,555-123-4567,900-12-3456,VIP renewal due
+CUST-88232,Maria Garcia,m.garcia@example.com,555-987-6543,900-45-1122,prefers phone
+CUST-88233,Dev Patel,dev.patel@acme.internal,555-222-0199,900-31-7788,escalated twice

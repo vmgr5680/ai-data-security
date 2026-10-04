@@ -1,0 +1,4 @@
+2026-09-20T10:31:58Z INFO request_id=7f2a route=/support/chat status=200 ms=412
+2026-09-20T10:32:04Z DEBUG redaction {"redacted": "900-12-3456", "replacement": "XXXXXXX3456"}
+2026-09-20T10:32:09Z WARN retry upstream=billing aws_access_key_id=AKIAIOSFODNN7EXAMPLE
+2026-09-20T10:32:11Z INFO request_id=7f2b route=/support/chat status=200 ms=388

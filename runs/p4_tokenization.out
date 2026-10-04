@@ -1,0 +1,32 @@
+== consistent tokens ==
+PERSON_001 purchased a laptop on the 3rd.
+PERSON_001 returned the laptop on the 9th.
+PERSON_001 contacted support about a refund.
+
+== per-request scope: two customers, one token ==
+PERSON_001 purchased a laptop.
+PERSON_001 returned a laptop.
+
+== format-preserving tokens ==
+4111 1111 1111 1111 -> 1006 0211 2476 7423
+900-12-3456 -> 274-76-1817
+Luhn check: True -> False
+
+== what the detector thinks of each kind of token ==
+Customer SSN 274-76-1817 on file. -> [('US_SSN', 0.85)]
+Customer SSN US_SSN_001 on file. -> []
+
+== the lab-record walk ==
+Patient PERSON_001, DOB DATE_TIME_001, SSN US_SSN_001.
+Hemoglobin 12.4. Diagnosis: diabetes. Phone 555-0142.
+John Smith has a hemoglobin of 12.4 and a diagnosis of diabetes.
+Follow up with PERSON_001 DATE_TIME_002.
+
+== naive reveal with a thousand stored names ==
+PERSON_1000 -> Customer #100-A0
+
+== the library Vault: whole-token reveal, scoped ==
+PERSON_1000 -> Customer #1000-A
+from tenant:globex -> PERSON_1000
+Patient PERSON_001, DOB DATE_TIME_001, SSN US_SSN_001.
+Hemoglobin 12.4. Diagnosis: diabetes. Phone 555-0142.

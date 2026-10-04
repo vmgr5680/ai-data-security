@@ -1,0 +1,42 @@
+== five requests through decide() ==
+action    role           agent      entity  purpose               dest
+MASK      support_rep    support    US_SSN  identity_verification internal
+BLOCK     support_rep    analytics  US_SSN  marketing_analysis    internal
+TOKENIZE  support_rep    support    PERSON  order_lookup          external
+ALLOW     fraud_analyst  fraud      US_SSN  fraud_check           contracted
+TOKENIZE  support_rep    support    PERSON  case_summary          internal
+
+== who writes the purpose? ==
+honest claim:   BLOCK
+helpful claim:  TOKENIZE
+bound to entry: BLOCK
+
+== fail closed on context nobody anticipated ==
+decide():        TOKENIZE - default: preserve linkage, withhold value
+decide_strict(): BLOCK - unknown agent 'summarizer-v2'
+
+== detect, mask, audit, and check the record for the value ==
+found US_SSN score 0.85
+mask -> Caller John Smith, SSN XXXXXXX3456, wants to update his address.
+audit record  contains the SSN: False
+debug line    contains the SSN: True
+
+== the library refuses a record that carries the value ==
+refused: 1 protected value(s) found in audit record
+
+== who obtained PERSON_001's SSN? ==
+denials-only log: [('u-481', 'analytics', 'block')]
+full log:
+   ('u-481', 'support', 'mask')
+   ('u-481', 'analytics', 'block')
+   ('u-207', 'fraud', 'allow')
+monitor summary: {('support', 'mask'): 1, ('analytics', 'block'): 1, ('support', 'tokenize'): 2, ('fraud', 'allow'): 1}
+policy version in every record: True
+
+== the reveal ladder: one birth date, six rungs ==
+full     1985-04-12
+partial  April 1985
+derived  age 41
+range    age 35-44
+boolean  is over 18: yes
+absent   None

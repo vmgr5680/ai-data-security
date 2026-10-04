@@ -1,0 +1,44 @@
+== retrieval: entitlement filter, then scan ==
+=== role=employee ===
+  dropped: ['c3', 'c5']
+  c1 public     no PII
+  c2 internal   DATE_TIME '30 November'
+  c4 internal   PERSON 'Maria Lopez'
+=== role=hr ===
+  dropped: ['c5']
+  c1 public     no PII
+  c2 internal   DATE_TIME '30 November'
+  c3 restricted PERSON 'John Smith', US_SSN '900-12-3456'
+  c4 internal   PERSON 'Maria Lopez'
+
+== filter inside the search vs after it (library) ==
+inside: ['c1', 'c4', 'c8']
+after:  ['c1'] (2 of 3 slots lost to discarded chunks)
+
+== memory: Part 6's gate, then the policy-aware gate ==
+memory store:
+  <PERSON_1> prefers email contact.
+  <PERSON_1> gave account number <US_BANK_NUMBER_1>.
+  <PERSON_1> mentioned a recent cardiac procedure.
+  <PERSON_1> was annoyed about the September billing error.
+vault: {'<PERSON_1>': 'Priya Shah', '<US_BANK_NUMBER_1>': '900123456'}
+policy-aware store:
+  PERSON_001 prefers email contact.   (keep 30d)
+  PERSON_001 gave account number US_BANK_NUMBER_001.   (keep 30d)
+  PERSON_001 was annoyed about the September billing error.   (keep 30d)
+refused: ['topic:cardiac']
+
+== output scanner: four answers ==
+verbatim     ['US_SSN']
+             -> The customer's SSN is <US_SSN>.
+spaced       ['US_SSN']
+             -> The customer's SSN is <US_SSN>.
+paraphrased  NOTHING DETECTED
+inferred     NOTHING DETECTED
+
+== the salary, with no threshold ==
+'John Smith'   PERSON             0.85
+'L6'           US_DRIVER_LICENSE  0.30
+'184000'       US_DRIVER_LICENSE  0.01
+'900-12-3456'  US_SSN             0.85
+at 0.4: ['PERSON', 'US_SSN']

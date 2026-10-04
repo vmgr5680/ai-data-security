@@ -1,0 +1,7 @@
+model input:    Patient PERSON_002, hemoglobin 12.4, diagnosis: diabetes.    tokens given: ['PERSON_002']
+model output:   PERSON_002 has a hemoglobin of 12.4. Compared with PERSON_001 from the last review, no change.
+
+naive reveal:   John Smith has a hemoglobin of 12.4. Compared with Maria Garcia from the last review, no change.
+guarded reveal: John Smith has a hemoglobin of 12.4. Compared with PERSON_001 from the last review, no change.
+
+audit: [('PERSON_002', 'revealed'), ('PERSON_001', 'revealed'), ('PERSON_002', 'revealed'), ('PERSON_001', 'refused_not_in_request')]

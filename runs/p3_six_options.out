@@ -1,0 +1,29 @@
+== mask ==
+Patient <PERSON>, SSN XXXXXXX3456, has diabetes.
+
+== redact vs replace ==
+redact   Patient <PERSON>, SSN , has diabetes.
+replace  Patient <PERSON>, SSN <SSN>, has diabetes.
+
+== redaction destroys linkage ==
+[('PERSON', 'John Smith', 0.85), ('PERSON', 'John Smith', 0.85), ('PERSON', 'John Smith', 0.85)]
+[REDACTED] purchased a laptop on the 3rd.
+[REDACTED] returned the laptop on the 9th.
+[REDACTED] contacted support about a refund.
+
+== encrypt, then decrypt ==
+PERSON  IQnhqyKFI1AGqa2zuXUani-w98P7PE2tq_Nk-1BRdZA=   (ciphertext differs per run)
+US_SSN  N4IZnAsMLrqTHXJ5YpmT7qaYZSYfwyG4DAf7UOgVgl0=   (ciphertext differs per run)
+Patient John Smith, SSN 900-12-3456, has diabetes.
+
+== hash operator: default (random salt) vs fixed salt ==
+default -> same hash both times: False
+{'salt': 'a-fixed-16b-salt'} -> same hash both times: True
+
+== unsalted SHA-256 of an SSN, attacked ==
+found: 900-12-3456
+rate: 1,082,973 hashes/sec
+all 1,000,000,000: 15.4 minutes (extrapolated)
+
+== the fix: a keyed hash (HMAC) keeps linkage, needs the key ==
+same value, same keyed hash: True b895bf54c75443eb...

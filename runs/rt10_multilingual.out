@@ -1,0 +1,11 @@
+== default English detector ==
+[en] EMAIL_ADDRESS 'maria.lopez@example.com'; PERSON 'Maria Lopez'; PHONE_NUMBER '+1 212 555 0147'; US_SSN '900-12-3456'
+[es] DATE_TIME '12345678Z'; EMAIL_ADDRESS 'maria.lopez@example.com'; PERSON 'María López'; PHONE_NUMBER '+34 612 345 678'
+[de] DATE_TIME '30 1234567'; EMAIL_ADDRESS 'maria.lopez@example.com'; LOCATION 'Telefon'; PERSON 'Erstattung'; PERSON 'Maria Lopez'; PERSON 'Steuer'; PHONE_NUMBER '+49 30 1234567'
+[hi] DATE_TIME '6789 0123'; DATE_TIME '98765 43210'; EMAIL_ADDRESS 'maria.lopez@example.com'; PHONE_NUMBER '+91 98765 43210'
+
+== plus the country recognizers Presidio ships but does not load ==
+[en] EMAIL_ADDRESS 'maria.lopez@example.com'; PERSON 'Maria Lopez'; PHONE_NUMBER '+1 212 555 0147'; US_SSN '900-12-3456'
+[es] DATE_TIME '12345678Z'; EMAIL_ADDRESS 'maria.lopez@example.com'; ES_NIF '12345678Z'; PERSON 'María López'; PHONE_NUMBER '+34 612 345 678'
+[de] DATE_TIME '30 1234567'; DE_TAX_ID '86095742719'; EMAIL_ADDRESS 'maria.lopez@example.com'; LOCATION 'Telefon'; PERSON 'Erstattung'; PERSON 'Maria Lopez'; PERSON 'Steuer'; PHONE_NUMBER '+49 30 1234567'
+[hi] DATE_TIME '6789 0123'; DATE_TIME '98765 43210'; EMAIL_ADDRESS 'maria.lopez@example.com'; PHONE_NUMBER '+91 98765 43210'

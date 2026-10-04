@@ -1,0 +1,82 @@
+
+== four spellings, plus the canonical sample ==
+900-12-3456
+    US_SSN             0.85
+900 12 3456
+    US_SSN             0.85
+900123456
+    US_SSN             0.40
+    US_PASSPORT        0.05
+    US_BANK_NUMBER     0.05
+    US_DRIVER_LICENSE  0.01
+nine zero zero one two three four five six
+    nothing
+123-45-6789
+    nothing
+
+== the other two deny-listed samples ==
+078-05-1120 [('PHONE_NUMBER', 0.4)]
+987-65-4320 [('US_ITIN', 0.5)]
+
+== custom EMPLOYEE_ID recognizer ==
+before:
+    PERSON             EMP-100417  0.85
+    US_DRIVER_LICENSE  100417      0.01
+    US_DRIVER_LICENSE  200932      0.01
+after:
+    EMPLOYEE_ID        EMP-100417  1.00
+    EMPLOYEE_ID        EMP-200932  1.00
+    PERSON             EMP-100417  0.85
+    US_DRIVER_LICENSE  100417      0.01
+    US_DRIVER_LICENSE  200932      0.01
+
+== checksums (Luhn) ==
+4111 1111 1111 1111 [('4111 1111 1111 1111', 'CREDIT_CARD', 1.0)]
+4111 1111 1111 1112 [('1112', 'DATE_TIME', 0.85)]
+1234 5678 9012 3456 [('3456', 'DATE_TIME', 0.85)]
+
+== named-entity recognition ==
+John Smith visited Dallas Children's Hospital.
+   ->  PERSON    'John Smith'   0.85
+John went to the hospital yesterday.
+   ->  PERSON    'John'         0.85
+   ->  DATE_TIME 'yesterday'    0.85
+
+== context words ==
+The patient was born in 1985.   DATE_TIME  0.85
+The invoice number is 1985.     DATE_TIME  0.85
+Date of Birth: 04/12/1985       DATE_TIME  0.95
+Invoice: 04/12/1985             DATE_TIME  0.60
+Invoice date: 04/12/1985        DATE_TIME  0.95
+
+== JSON: values alone vs values plus field names as context ==
+customer_name  PERSON     bare 0.85   +field name 0.85
+date_of_birth  DATE_TIME  bare 0.60   +field name 0.95
+ssn            US_SSN     bare 0.50   +field name 0.85
+
+== semantic gap: a medical tool response ==
+PERSON     'Sarah Johnson'   0.85
+DATE_TIME  '08/22/1991'      0.60
+
+== precision and recall on ten hard lines ==
+false alarm: Email
+false alarm: example.com
+false alarm: jane.do
+missed:      EMP-100417
+missed:      nine zero zero one two three four five six
+false alarm: nine zero zero
+false alarm: Tuesday
+false alarm: Invoice 900123456
+TP=5  FP=6  FN=2
+precision = 5/11 = 45%
+recall    = 5/7 = 71%
+-- with drop_nested --
+TP=5  FP=4  FN=2
+precision = 5/9 = 56%
+recall    = 5/7 = 71%
+
+== latency, p95 over 40 runs (machine-dependent) ==
+payload size          6,050 chars
+regex only, payload    0.07 ms
+analyzer, sentence     4.11 ms
+analyzer, payload    368.88 ms
