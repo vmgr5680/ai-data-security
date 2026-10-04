@@ -44,6 +44,17 @@ def test_part2_deny_list_and_precision_recall(out):
     assert "ssn            US_SSN     bare 0.50   +field name 0.85" in o
 
 
+def test_part2_explained_scores_overlaps_and_config(out):
+    o = out["p2_detection.py"]
+    assert "pattern 0.50 -> 0.85  context word: ssn" in o      # 0.85 = 0.50 + 0.35
+    assert "pattern 0.90 -> 1.00  context word: emp" in o      # boost from the ID itself
+    assert "found  US_ITIN  900-77-3301  0.50" in o            # same span twice
+    assert "kept   US_ITIN" not in o                           # resolve_overlaps keeps one
+    assert "(\"Dallas Children's Hospital\", 'ORG')" in o      # spaCy found it
+    assert "ORGANIZATION ignored by default: True" in o         # Presidio dropped it
+    assert "precision = 5/15 = 33%" in o                       # hand-written config
+
+
 def test_part3_operators(out):
     o = out["p3_six_options.py"]
     assert "redact   Patient <PERSON>, SSN , has diabetes." in o

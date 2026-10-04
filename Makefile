@@ -9,7 +9,7 @@ install:            ## venv, package, detector model (about 600 MB for the model
 	$(PY) -m pip install -q -e '.[dev]'
 	$(PY) -m spacy download en_core_web_lg
 
-test:               ## 35 tests: article claims, library, scenarios (~20s)
+test:               ## 36 tests: article claims, library, scenarios (~20s)
 	$(PY) -m pytest
 
 parts:              ## re-run every article's examples, part by part

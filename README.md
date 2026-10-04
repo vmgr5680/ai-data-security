@@ -30,7 +30,7 @@ You need Python 3.10 or newer (tested on 3.10, 3.12 and 3.14) and about
 
 ```bash
 make install      # venv + package + spaCy's large English model
-make test         # 35 tests, about 20 seconds
+make test         # 36 tests, about 20 seconds
 make parts        # every article's examples, part by part
 make realtime     # the ten real-world scenarios
 ```
@@ -101,6 +101,11 @@ are in `src/ai_data_security/`.
 | 6. Securing RAG and Agent Memory | `parts/p6_rag_and_memory.py` | `rag`, `memory`, `output` |
 | 7. Policy, Access Control, and Audit | `parts/p7_policy_and_audit.py` | `policy`, `audit`, `vault.reveal_ladder` |
 | 8. Choosing Your AI Data Security Architecture | `parts/p8_scorecard.py` | (the scorecard) |
+
+Part 2's script is split into one function per claim (`four_spellings()`,
+`employee_id_recognizer()`, `precision_recall()` and so on, listed in its
+docstring). The article names the function next to each result instead of
+printing the full code.
 
 The part scripts keep the articles' code as printed. The one change is that
 they share a single analyzer, so the language model loads once per script,

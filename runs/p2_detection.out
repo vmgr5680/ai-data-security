@@ -6,8 +6,8 @@
     US_SSN             0.85
 900123456
     US_SSN             0.40
-    US_PASSPORT        0.05
     US_BANK_NUMBER     0.05
+    US_PASSPORT        0.05
     US_DRIVER_LICENSE  0.01
 nine zero zero one two three four five six
     nothing
@@ -17,6 +17,9 @@ nine zero zero one two three four five six
 == the other two deny-listed samples ==
 078-05-1120 [('PHONE_NUMBER', 0.4)]
 987-65-4320 [('US_ITIN', 0.5)]
+
+== where 0.85 comes from ==
+    US_SSN             900-12-3456  pattern 0.50 -> 0.85  context word: ssn
 
 == custom EMPLOYEE_ID recognizer ==
 before:
@@ -29,6 +32,16 @@ after:
     PERSON             EMP-100417  0.85
     US_DRIVER_LICENSE  100417      0.01
     US_DRIVER_LICENSE  200932      0.01
+which word boosted it:
+    EMPLOYEE_ID        EMP-100417   pattern 0.90 -> 1.00  context word: emp
+    US_DRIVER_LICENSE  100417       pattern 0.01 -> 0.01  context word: -
+
+== two recognizers, one span ==
+    found  PERSON   John Smith   0.85
+    found  US_SSN   900-77-3301  0.85
+    found  US_ITIN  900-77-3301  0.50
+    kept   PERSON   John Smith   0.85
+    kept   US_SSN   900-77-3301  0.85
 
 == checksums (Luhn) ==
 4111 1111 1111 1111 [('4111 1111 1111 1111', 'CREDIT_CARD', 1.0)]
@@ -41,6 +54,11 @@ John Smith visited Dallas Children's Hospital.
 John went to the hospital yesterday.
    ->  PERSON    'John'         0.85
    ->  DATE_TIME 'yesterday'    0.85
+
+== what spaCy found, and what Presidio ignores by default ==
+[('John Smith', 'PERSON'), ("Dallas Children's Hospital", 'ORG')]
+[('John', 'PERSON'), ('yesterday', 'DATE')]
+ORGANIZATION ignored by default: True
 
 == context words ==
 The patient was born in 1985.   DATE_TIME  0.85
@@ -75,8 +93,14 @@ TP=5  FP=4  FN=2
 precision = 5/9 = 56%
 recall    = 5/7 = 71%
 
+== same ten lines, hand-written spaCy config ==
+TP=5  FP=10  FN=2
+precision = 5/15 = 33%
+recall    = 5/7 = 71%
+
 == latency, p95 over 40 runs (machine-dependent) ==
 payload size          6,050 chars
 regex only, payload    0.07 ms
-analyzer, sentence     4.11 ms
-analyzer, payload    368.88 ms
+analyzer, sentence     4.22 ms
+analyzer, payload    358.61 ms
+share spent in the spaCy pipeline: 86%
