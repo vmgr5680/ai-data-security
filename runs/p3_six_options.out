@@ -1,3 +1,4 @@
+
 == mask ==
 Patient <PERSON>, SSN XXXXXXX3456, has diabetes.
 
@@ -12,9 +13,18 @@ replace  Patient <PERSON>, SSN <SSN>, has diabetes.
 [REDACTED] contacted support about a refund.
 
 == encrypt, then decrypt ==
-PERSON  IQnhqyKFI1AGqa2zuXUani-w98P7PE2tq_Nk-1BRdZA=   (ciphertext differs per run)
-US_SSN  N4IZnAsMLrqTHXJ5YpmT7qaYZSYfwyG4DAf7UOgVgl0=   (ciphertext differs per run)
+PERSON  MdiDKDGPEDxrHWGUXQZseSZiklSQbIVK3FeY88ZlpyE=   (ciphertext differs per run)
+US_SSN  lfeAEx_xnNfGTT9u5w5agcsWoQFlU5IHp6UDHLRS1A0=   (ciphertext differs per run)
 Patient John Smith, SSN 900-12-3456, has diabetes.
+
+== encrypt the same SSN twice: no linkage ==
+same ciphertext both times: False
+
+== what the detector misses, every operator allows ==
+[]
+  at 0.5: My SSN is nine zero zero one two three four five six.
+[('US_SSN', 0.4), ('US_PASSPORT', 0.05), ('US_BANK_NUMBER', 0.05), ('US_DRIVER_LICENSE', 0.01)]
+  at 0.5: My SSN is 900123456.
 
 == hash operator: default (random salt) vs fixed salt ==
 default -> same hash both times: False
@@ -22,8 +32,8 @@ default -> same hash both times: False
 
 == unsalted SHA-256 of an SSN, attacked ==
 found: 900-12-3456
-rate: 1,082,973 hashes/sec
-all 1,000,000,000: 15.4 minutes (extrapolated)
+rate: 1,148,002 hashes/sec
+all 1,000,000,000: 14.5 minutes (extrapolated)
 
 == the fix: a keyed hash (HMAC) keeps linkage, needs the key ==
 same value, same keyed hash: True b895bf54c75443eb...

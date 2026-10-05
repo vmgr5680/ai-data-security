@@ -61,6 +61,9 @@ def test_part3_operators(out):
     assert "default -> same hash both times: False" in o
     assert "{'salt': 'a-fixed-16b-salt'} -> same hash both times: True" in o
     assert "found: 900-12-3456" in o
+    assert "same ciphertext both times: False" in o           # encrypt: no linkage
+    assert "  at 0.5: My SSN is 900123456." in o               # low score passes
+    assert "  at 0.5: My SSN is nine zero zero" in o           # miss passes
 
 
 def test_part4_tokens(out):
