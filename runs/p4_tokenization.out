@@ -1,3 +1,4 @@
+
 == consistent tokens ==
 PERSON_001 purchased a laptop on the 3rd.
 PERSON_001 returned the laptop on the 9th.
@@ -22,6 +23,10 @@ Hemoglobin 12.4. Diagnosis: diabetes. Phone 555-0142.
 John Smith has a hemoglobin of 12.4 and a diagnosis of diabetes.
 Follow up with PERSON_001 DATE_TIME_002.
 
+== five findings on one span ==
+['US_PASSPORT', 'US_SSN', 'US_ITIN', 'US_BANK_NUMBER', 'US_DRIVER_LICENSE']
+Customer SSN US_PASSPORT_001101UMBER_001_LICENSE_001 on file.
+
 == naive reveal with a thousand stored names ==
 PERSON_1000 -> Customer #100-A0
 
@@ -30,3 +35,4 @@ PERSON_1000 -> Customer #1000-A
 from tenant:globex -> PERSON_1000
 Patient PERSON_001, DOB DATE_TIME_001, SSN US_SSN_001.
 Hemoglobin 12.4. Diagnosis: diabetes. Phone 555-0142.
+Customer SSN US_PASSPORT_001 on file.

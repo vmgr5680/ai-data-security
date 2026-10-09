@@ -100,14 +100,16 @@ def drop_nested(findings: list[RecognizerResult]) -> list[RecognizerResult]:
 
 
 def resolve_overlaps(findings: list["Finding"]) -> list["Finding"]:
-    """Keep one finding per region of text: highest score, then longest.
+    """Keep one finding per region of text: highest score, then longest,
+    then entity type name, so tied findings resolve the same way every run.
 
     Needed before any transformation. Two recognizers can report the
     *same* span (``900-77-3301`` is both a US_SSN at 0.85 and a US_ITIN at
     0.5); replacing it twice shifts the text and eats the next character.
     """
     kept: list[Finding] = []
-    for f in sorted(findings, key=lambda f: (-f.score, -(f.end - f.start))):
+    for f in sorted(findings, key=lambda f: (-f.score, -(f.end - f.start),
+                                         f.entity_type)):
         if all(f.end <= k.start or f.start >= k.end for k in kept):
             kept.append(f)
     return sorted(kept, key=lambda f: f.start)

@@ -73,6 +73,8 @@ def test_part4_tokens(out):
     assert "Phone 555-0142." in o                     # not tokenized
     assert "PERSON_1000 -> Customer #100-A0" in o     # naive reveal bug
     assert "PERSON_1000 -> Customer #1000-A" in o     # vault fix
+    assert "01UMBER_001_LICENSE_001 on file." in o   # overlap bug (tie order varies)
+    assert "Customer SSN US_PASSPORT_001 on file." in o   # vault: one per span
 
 
 def test_part5_nine_words(out):
