@@ -74,9 +74,9 @@ print(d.action, "->", shown.text)
 
 log = AuditLog()
 record = log.record(ctx, d, "PERSON_001", protected_values=(original,))
-debug = {"redacted": original,
+debug = {"original_secret_DO_NOT_LOG": original,
          "replacement": shown.text[ssn.start:ssn.end]}
-for name, rec in [("audit record", record), ("debug line", debug)]:
+for name, rec in [("audit record", record), ("unsafe debug", debug)]:
     print(f"{name:<13} contains the SSN:", original in json.dumps(rec))
 
 print("\n== the library refuses a record that carries the value ==")

@@ -4,6 +4,7 @@ One function per result, in article order:
 
     retrieval_two_controls()   entitlement filter, then scan, for two roles
     inside_vs_after()          filter inside the search versus after it
+    tokenize_before_embedding() what the index holds if c3 is tokenized first
     memory_gate_sketch()       the tokenize-on-write gate (token_for, remember)
     policy_aware_gate()        the library gate: refuses the cardiac note
     output_scanner()           the four answers through scan_output()
@@ -80,6 +81,17 @@ def inside_vs_after():
           f"({3 - len(after)} of 3 slots lost to discarded chunks)")
 
 
+def tokenize_before_embedding():
+    print("\n== tokenize at ingestion, before embedding ==")
+    vault = Vault()
+    c3 = CHUNKS[2]["text"]
+    indexed, _ = vault.tokenize(c3, scan_text(c3, analyzer), "index")
+    print("index holds:", indexed)
+    print("hr reveal:  ", vault.reveal(indexed, "index", "hr-assistant"))
+    vault.forget("index", "900-12-3456")
+    print("forgotten:  ", vault.reveal(indexed, "index", "hr-assistant"))
+
+
 TOKENIZE = ["PERSON", "US_SSN", "US_BANK_NUMBER",
             "EMAIL_ADDRESS", "PHONE_NUMBER"]
 vault, memory = {}, []
@@ -154,6 +166,7 @@ def salary_no_threshold():
 if __name__ == "__main__":
     retrieval_two_controls()
     inside_vs_after()
+    tokenize_before_embedding()
     memory_gate_sketch()
     policy_aware_gate()
     output_scanner()

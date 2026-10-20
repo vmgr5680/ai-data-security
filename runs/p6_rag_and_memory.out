@@ -15,6 +15,11 @@
 inside: ['c1', 'c4', 'c8']
 after:  ['c1'] (2 of 3 slots lost to discarded chunks)
 
+== tokenize at ingestion, before embedding ==
+index holds: PERSON_001, band L6, base salary 184000, SSN US_SSN_001.
+hr reveal:   John Smith, band L6, base salary 184000, SSN 900-12-3456.
+forgotten:   John Smith, band L6, base salary 184000, SSN US_SSN_001.
+
 == memory: Part 6's gate, then the policy-aware gate ==
 memory store:
   <PERSON_1> prefers email contact.

@@ -19,7 +19,7 @@ decide_strict(): BLOCK - unknown agent 'summarizer-v2'
 found US_SSN score 0.85
 mask -> Caller John Smith, SSN XXXXXXX3456, wants to update his address.
 audit record  contains the SSN: False
-debug line    contains the SSN: True
+unsafe debug  contains the SSN: True
 
 == the library refuses a record that carries the value ==
 refused: 1 protected value(s) found in audit record

@@ -1,8 +1,9 @@
 """decide(): context in, action and reason out (Part 7).
 
-``decide`` is the function from Part 7, rule for rule. Two things the
-article lists under "from this sketch to production" are added around it,
-not inside it, so the rules stay readable:
+``decide`` is the function from Part 7, rule for rule, including its
+context validation (missing fields, unknown destination or environment).
+Two more things the article lists under "from this sketch to production"
+are added around it:
 
 * ``purpose_for`` binds purpose to the entry point. Whatever the agent
   claims is ignored.
@@ -37,9 +38,21 @@ class Decision:
 
 REGULATED = {"US_SSN", "CREDIT_CARD"}
 NEEDS_IDENTITY = {"identity_verification", "fraud_check"}
+VALID_DESTINATIONS = {"internal", "contracted", "external"}
+VALID_ENVIRONMENTS = {"prod", "staging"}
 
 
 def decide(c: Context) -> Decision:
+    # Reject incomplete or unknown context before applying business rules.
+    required = (c.user, c.role, c.agent, c.tool, c.entity_type,
+                c.purpose, c.destination, c.environment)
+    if not all(required):
+        return Decision("block", "missing required decision context")
+    if c.destination not in VALID_DESTINATIONS:
+        return Decision("block", "unknown destination")
+    if c.environment not in VALID_ENVIRONMENTS:
+        return Decision("block", "unknown environment")
+
     if c.destination == "external" and c.entity_type in REGULATED:
         return Decision(
             "block", "regulated data may not leave the trust boundary")
@@ -52,9 +65,12 @@ def decide(c: Context) -> Decision:
         return Decision(
             "mask", "verification needs recognition, not the value")
 
-    if c.destination == "contracted" and c.purpose == "fraud_check":
+    if (c.destination == "contracted" and c.tool == "fraud_vendor"
+            and c.agent == "fraud" and c.role == "fraud_analyst"
+            and c.purpose == "fraud_check" and c.entity_type == "US_SSN"
+            and c.environment == "prod"):
         return Decision(
-            "allow", "contracted processor, purpose requires original")
+            "allow", "explicit fraud workflow and approved vendor context")
 
     return Decision(
         "tokenize", "default: preserve linkage, withhold value")

@@ -92,6 +92,14 @@ def test_part6_output_scanner_misses_meaning(out):
     assert "dropped: ['c3', 'c5']" in o
 
 
+def test_part6_tokenized_index_still_holds_the_salary(out):
+    o = out["p6_rag_and_memory.py"]
+    assert ("index holds: PERSON_001, band L6, base salary 184000, "
+            "SSN US_SSN_001.") in o
+    assert "forgotten:   John Smith, band L6, base salary 184000, " \
+           "SSN US_SSN_001." in o
+
+
 def test_part7_purpose_and_audit(out):
     o = out["p7_policy_and_audit.py"]
     assert "helpful claim:  TOKENIZE" in o
